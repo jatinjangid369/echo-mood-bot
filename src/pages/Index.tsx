@@ -15,23 +15,41 @@ import ExerciseRecommendations from "@/components/ExerciseRecommendations";
 import NutritionTracker from "@/components/NutritionTracker";
 import MotivationalStories from "@/components/MotivationalStories";
 import EmergencySupport from "@/components/EmergencySupport";
-import { Heart, Brain, TrendingUp, MessageCircle, User, TestTube, Music, GamepadIcon, Dumbbell, Apple, BookOpen, AlertTriangle } from "lucide-react";
+import AuthForm from "@/components/AuthForm";
+import { Heart, Brain, TrendingUp, MessageCircle, User, TestTube, Music, GamepadIcon, Dumbbell, Apple, BookOpen, AlertTriangle, LogOut } from "lucide-react";
 
 const Index = () => {
   const [selectedTab, setSelectedTab] = useState("tracker");
-  const [userMood, setUserMood] = useState(3); // Default neutral mood
+  const [userMood, setUserMood] = useState(3);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
   
-  // Dynamic color theme based on mood
   const getMoodTheme = (mood: number) => {
     switch (mood) {
-      case 1: return "from-red-400 to-orange-400"; // Very Sad
-      case 2: return "from-orange-400 to-yellow-400"; // Sad
-      case 3: return "from-yellow-400 to-green-400"; // Neutral
-      case 4: return "from-green-400 to-blue-400"; // Happy
-      case 5: return "from-blue-400 to-purple-400"; // Very Happy
+      case 1: return "from-red-400 to-orange-400";
+      case 2: return "from-orange-400 to-yellow-400";
+      case 3: return "from-yellow-400 to-green-400";
+      case 4: return "from-green-400 to-blue-400";
+      case 5: return "from-blue-400 to-purple-400";
       default: return "from-blue-500 to-purple-500";
     }
   };
+
+  const handleLogin = (user: { username: string; email: string }) => {
+    setUsername(user.username);
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setUsername("");
+    setUserMood(3);
+    setSelectedTab("tracker");
+  };
+
+  if (!isAuthenticated) {
+    return <AuthForm onLogin={handleLogin} />;
+  }
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -58,15 +76,29 @@ const Index = () => {
         {/* Header */}
         <header className="bg-white/20 backdrop-blur-md border-b border-white/30 shadow-lg animate-slide-down">
           <div className="max-w-6xl mx-auto px-4 py-6">
-            <div className="flex items-center gap-3 animate-fade-in">
-              <div className={`p-2 bg-gradient-to-r ${getMoodTheme(userMood)} rounded-xl shadow-lg animate-pulse-gentle`}>
-                <Heart className="h-6 w-6 text-white" />
+            <div className="flex items-center justify-between animate-fade-in">
+              <div className="flex items-center gap-3">
+                <div className={`p-2 bg-gradient-to-r ${getMoodTheme(userMood)} rounded-xl shadow-lg animate-pulse-gentle`}>
+                  <Heart className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent animate-text-shimmer">
+                    MindfulMe
+                  </h1>
+                  <p className="text-sm text-gray-700 font-medium">Your comprehensive mental wellness companion</p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent animate-text-shimmer">
-                  MindfulMe
-                </h1>
-                <p className="text-sm text-gray-700 font-medium">Your comprehensive mental wellness companion</p>
+              <div className="flex items-center gap-4">
+                <span className="text-gray-700 font-medium">Welcome, {username}!</span>
+                <Button
+                  onClick={handleLogout}
+                  variant="outline"
+                  size="sm"
+                  className="bg-white/20 backdrop-blur-md border-white/30 hover:bg-white/30"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </Button>
               </div>
             </div>
           </div>
@@ -76,7 +108,7 @@ const Index = () => {
         <main className="max-w-6xl mx-auto px-4 py-8">
           <div className="mb-8 animate-fade-in-up delay-200">
             <h2 className="text-3xl font-bold text-gray-800 mb-2 animate-bounce-gentle">
-              How are you feeling today?
+              How are you feeling today, {username}?
             </h2>
             <p className="text-gray-700 font-medium">
               Comprehensive mental health support with AI-powered insights and wellness tools
@@ -141,7 +173,7 @@ const Index = () => {
               </TabsContent>
 
               <TabsContent value="quiz" className="space-y-6 animate-fade-in-scale">
-                <MoodQuiz onMoodResult={setUserMood} />
+                <MoodQuiz onMoodChange={setUserMood} onMoodResult={setUserMood} />
               </TabsContent>
 
               <TabsContent value="personality" className="space-y-6 animate-fade-in-scale">
