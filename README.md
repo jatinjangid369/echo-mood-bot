@@ -1,73 +1,38 @@
-# Welcome to your Lovable project
+# 🧠 MindFull – A Holistic Mental Wellness Companion
 
-## Project info
+## 📝 Problem Statement
 
-**URL**: https://lovable.dev/projects/604f9cf7-8d1d-4a4c-8bde-7eaa97940cee
+In today's fast-paced world, mental health issues like anxiety, stress, and depression are increasingly common, especially among youth and working professionals. Limited access to professional help, societal stigma, and a lack of daily coping tools exacerbate the problem. The challenge is to create an accessible, tech-driven platform that supports users' mental well-being in real-time and over the long term.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 💡 Solution Overview
 
-**Use Lovable**
+*MindFull* is a multi-feature mental health support platform designed to enhance users' moods and improve emotional well-being using a blend of modern AI, neuroscience, and wellness content. Our core features include:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/604f9cf7-8d1d-4a4c-8bde-7eaa97940cee) and start prompting.
+- 🎧 *Binaural Beats & Solfeggio Frequencies*: Scientifically backed audio therapy to reduce stress, anxiety, and enhance focus.
+- 📈 *Mood Tracker*: Real-time mood logging to analyze emotional trends and triggers.
+- 🤖 *AI Psychiatrist Bot* (menu-based): A friendly, low-level AI chatbot that helps users navigate their feelings and provides actionable advice.
+- 🎮 *Mood-Boosting Games & Satisfying Videos*: Interactive mini-games and visually soothing content for instant mood uplift.
+- 📚 *Motivational Stories*: Real stories and quotes to inspire and emotionally energize users.
+- 📊 *Insights Dashboard*: Visual reports and statistics to help users reflect on their emotional progress over time.
 
-Changes made via Lovable will be committed automatically to this repo.
+The frontend is built using *React*, and we integrated generative AI and external APIs to personalize the user experience.
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🔌 APIs Used
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- 🎵 *Loveable AI*: For personalized mood support responses and audio suggestions.
+- 🌦 *Emotion-to-Content Mapping API* (custom): Maps user mood to games, videos, or motivational stories.
+- 📈 *Mood Insights Engine* (custom backend): Analyzes mood tracking data for insights and trends( we are working on it because of time constrains we are not able to connet backend.. yet)
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## ⚙ Setup Instructions
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
+### Prerequisites
+- Node.js (v16 or above)
+- npm
+- Git
 - React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/604f9cf7-8d1d-4a4c-8bde-7eaa97940cee) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
