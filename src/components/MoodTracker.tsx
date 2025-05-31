@@ -7,7 +7,11 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Smile, Meh, Frown, Heart, Star } from "lucide-react";
 import { toast } from "sonner";
 
-const MoodTracker = () => {
+interface MoodTrackerProps {
+  onMoodChange?: (mood: number) => void;
+}
+
+const MoodTracker = ({ onMoodChange }: MoodTrackerProps) => {
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
   const [note, setNote] = useState("");
   const [moodHistory, setMoodHistory] = useState([
@@ -25,6 +29,14 @@ const MoodTracker = () => {
     { value: 4, label: "Happy", icon: Smile, color: "text-green-500", bg: "bg-green-100", hoverBg: "hover:bg-green-200" },
     { value: 5, label: "Very Happy", icon: Star, color: "text-purple-500", bg: "bg-purple-100", hoverBg: "hover:bg-purple-200" },
   ];
+
+  const handleMoodSelect = (mood: number) => {
+    setSelectedMood(mood);
+    // Immediately call the onMoodChange callback
+    if (onMoodChange) {
+      onMoodChange(mood);
+    }
+  };
 
   const saveMood = () => {
     if (selectedMood) {
@@ -62,7 +74,7 @@ const MoodTracker = () => {
               return (
                 <button
                   key={mood.value}
-                  onClick={() => setSelectedMood(mood.value)}
+                  onClick={() => handleMoodSelect(mood.value)}
                   className={`p-4 rounded-xl border-2 transition-all duration-500 hover:scale-110 hover:rotate-3 hover:shadow-lg transform-gpu animate-fade-in ${
                     selectedMood === mood.value
                       ? `border-${mood.color.split('-')[1]}-400 ${mood.bg} shadow-lg scale-105 rotate-1 animate-bounce-gentle`
