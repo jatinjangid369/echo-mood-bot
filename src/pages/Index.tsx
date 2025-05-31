@@ -1,7 +1,8 @@
+
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, Brain, Activity, Zap, Gamepad2, Dumbbell, Apple, BookOpen, Phone, Palette, LogOut, User } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MoodTracker from "@/components/MoodTracker";
 import ChatSupport from "@/components/ChatSupport";
 import MoodInsights from "@/components/MoodInsights";
@@ -14,139 +15,177 @@ import ExerciseRecommendations from "@/components/ExerciseRecommendations";
 import NutritionTracker from "@/components/NutritionTracker";
 import MotivationalStories from "@/components/MotivationalStories";
 import EmergencySupport from "@/components/EmergencySupport";
-import AuthForm from "@/components/AuthForm";
+import { Heart, Brain, TrendingUp, MessageCircle, User, TestTube, Music, GamepadIcon, Dumbbell, Apple, BookOpen, AlertTriangle } from "lucide-react";
 
 const Index = () => {
-  const [currentMood, setCurrentMood] = useState<number>(3);
-  const [user, setUser] = useState<{ email: string; name?: string } | null>(null);
-
-  // If user is not authenticated, show auth form
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 relative overflow-hidden">
-        {/* Animated background elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float-slow"></div>
-          <div className="absolute top-40 right-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float-medium delay-1000"></div>
-          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float-fast delay-2000"></div>
-          
-          {/* Floating elements */}
-          <div className="absolute top-1/4 left-1/4 text-4xl animate-float-slow delay-500">🌸</div>
-          <div className="absolute top-1/3 right-1/4 text-3xl animate-float-medium delay-1500">🦋</div>
-          <div className="absolute bottom-1/4 left-1/3 text-5xl animate-float-fast delay-2500">🌙</div>
-          <div className="absolute top-1/2 right-1/3 text-3xl animate-float-slow delay-3000">✨</div>
-        </div>
-
-        <AuthForm onAuthSuccess={setUser} />
-      </div>
-    );
-  }
-
+  const [selectedTab, setSelectedTab] = useState("tracker");
+  const [userMood, setUserMood] = useState(3); // Default neutral mood
+  
+  // Dynamic color theme based on mood
   const getMoodTheme = (mood: number) => {
-    switch(mood) {
-      case 1: return { bg: "from-gray-400 via-gray-300 to-gray-200", accent: "red" };
-      case 2: return { bg: "from-orange-400 via-orange-300 to-yellow-200", accent: "orange" };
-      case 3: return { bg: "from-blue-400 via-blue-300 to-blue-200", accent: "blue" };
-      case 4: return { bg: "from-green-400 via-green-300 to-green-200", accent: "green" };
-      case 5: return { bg: "from-purple-400 via-pink-300 to-pink-200", accent: "purple" };
-      default: return { bg: "from-blue-50 via-purple-50 to-pink-50", accent: "blue" };
+    switch (mood) {
+      case 1: return "from-red-400 to-orange-400"; // Very Sad
+      case 2: return "from-orange-400 to-yellow-400"; // Sad
+      case 3: return "from-yellow-400 to-green-400"; // Neutral
+      case 4: return "from-green-400 to-blue-400"; // Happy
+      case 5: return "from-blue-400 to-purple-400"; // Very Happy
+      default: return "from-blue-500 to-purple-500";
     }
   };
 
-  const theme = getMoodTheme(currentMood);
-
-  const tabs = [
-    { id: "mood", label: "Mood Tracker", icon: Heart, component: MoodTracker },
-    { id: "personality", label: "AI Psychiatrist", icon: Brain, component: PersonalityChat },
-    { id: "quiz", label: "Mood Quiz", icon: Activity, component: MoodQuiz },
-    { id: "beats", label: "Binaural Beats", icon: Zap, component: BineuralBeats },
-    { id: "relaxation", label: "Relaxation Hub", icon: Gamepad2, component: RelaxationHub },
-    { id: "exercise", label: "Exercise", icon: Dumbbell, component: ExerciseRecommendations },
-    { id: "nutrition", label: "Nutrition", icon: Apple, component: NutritionTracker },
-    { id: "stories", label: "Stories", icon: BookOpen, component: MotivationalStories },
-    { id: "emergency", label: "Emergency", icon: Phone, component: EmergencySupport },
-    { id: "chat", label: "Chat Support", icon: Brain, component: ChatSupport },
-    { id: "insights", label: "Insights", icon: Palette, component: MoodInsights },
-    { id: "checkin", label: "Daily Check-in", icon: Activity, component: DailyCheckIn },
-  ];
-
-  const handleLogout = () => {
-    setUser(null);
-  };
-
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${theme.bg} relative overflow-hidden transition-all duration-1000`}>
-      {/* Header with user info and logout */}
-      <div className="relative z-10 p-4">
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center">
-            <Heart className="h-8 w-8 text-pink-500 animate-heartbeat mr-3" />
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent animate-fade-in">
-              MindfulMe
-            </h1>
-          </div>
-          
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-lg rounded-full px-4 py-2 border border-white/30">
-              <User className="h-4 w-4 text-gray-600" />
-              <span className="text-sm text-gray-700">
-                {user.name || user.email.split('@')[0]}
-              </span>
-            </div>
-            <Button
-              onClick={handleLogout}
-              variant="outline"
-              size="sm"
-              className="bg-white/20 backdrop-blur-lg border-white/30 hover:bg-white/30 transition-all duration-300"
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
-            </Button>
-          </div>
-        </div>
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Background Image with Blur Effect */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80')"
+        }}
+      >
+        <div className="absolute inset-0 backdrop-blur-sm bg-white/30"></div>
       </div>
-
-      {/* Animated background elements */}
+      
+      {/* Animated Floating Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float-slow"></div>
-        <div className="absolute top-40 right-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float-medium delay-1000"></div>
-        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float-fast delay-2000"></div>
-        
-        {/* Floating elements */}
-        <div className="absolute top-1/4 left-1/4 text-4xl animate-float-slow delay-500">🌸</div>
-        <div className="absolute top-1/3 right-1/4 text-3xl animate-float-medium delay-1500">🦋</div>
-        <div className="absolute bottom-1/4 left-1/3 text-5xl animate-float-fast delay-2500">🌙</div>
-        <div className="absolute top-1/2 right-1/3 text-3xl animate-float-slow delay-3000">✨</div>
+        <div className="absolute top-20 left-10 w-20 h-20 bg-blue-200/20 rounded-full animate-float-slow"></div>
+        <div className="absolute top-40 right-20 w-16 h-16 bg-purple-200/20 rounded-full animate-float-medium delay-1000"></div>
+        <div className="absolute bottom-40 left-20 w-24 h-24 bg-pink-200/20 rounded-full animate-float-fast delay-2000"></div>
+        <div className="absolute bottom-20 right-10 w-12 h-12 bg-indigo-200/20 rounded-full animate-float-slow delay-500"></div>
       </div>
 
-      <div className="relative z-10 p-4">
-        <div className="max-w-7xl mx-auto">
-          <Tabs defaultValue="mood" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 lg:grid-cols-6 gap-2 bg-white/20 backdrop-blur-lg border-white/30 p-2 rounded-xl shadow-xl animate-fade-in-up delay-200">
-              {tabs.map((tab, index) => (
-                <TabsTrigger
-                  key={tab.id}
-                  value={tab.id}
-                  className="flex flex-col items-center gap-1 p-3 text-xs font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg data-[state=active]:bg-white/40 data-[state=active]:shadow-xl data-[state=active]:scale-105 animate-fade-in"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  <tab.icon className="h-4 w-4" />
-                  <span className="hidden sm:inline">{tab.label}</span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
-
-            <div className="mt-6 animate-fade-in-up delay-400">
-              {tabs.map((tab) => (
-                <TabsContent key={tab.id} value={tab.id} className="space-y-6">
-                  <tab.component 
-                    onMoodChange={tab.id === "mood" ? setCurrentMood : undefined}
-                  />
-                </TabsContent>
-              ))}
+      {/* Content with Glass Effect */}
+      <div className="relative z-10">
+        {/* Header */}
+        <header className="bg-white/20 backdrop-blur-md border-b border-white/30 shadow-lg animate-slide-down">
+          <div className="max-w-6xl mx-auto px-4 py-6">
+            <div className="flex items-center gap-3 animate-fade-in">
+              <div className={`p-2 bg-gradient-to-r ${getMoodTheme(userMood)} rounded-xl shadow-lg animate-pulse-gentle`}>
+                <Heart className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent animate-text-shimmer">
+                  MindfulMe
+                </h1>
+                <p className="text-sm text-gray-700 font-medium">Your comprehensive mental wellness companion</p>
+              </div>
             </div>
-          </Tabs>
-        </div>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main className="max-w-6xl mx-auto px-4 py-8">
+          <div className="mb-8 animate-fade-in-up delay-200">
+            <h2 className="text-3xl font-bold text-gray-800 mb-2 animate-bounce-gentle">
+              How are you feeling today?
+            </h2>
+            <p className="text-gray-700 font-medium">
+              Comprehensive mental health support with AI-powered insights and wellness tools
+            </p>
+          </div>
+
+          <div className="animate-fade-in-up delay-400">
+            <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
+              <TabsList className="grid w-full grid-cols-6 lg:grid-cols-12 gap-1 bg-white/30 backdrop-blur-md border border-white/40 shadow-xl">
+                <TabsTrigger value="tracker" className="flex items-center gap-1 text-xs transition-all duration-300 hover:scale-105 data-[state=active]:bg-white/80">
+                  <Heart className="h-3 w-3 animate-heartbeat" />
+                  <span className="hidden sm:inline">Mood</span>
+                </TabsTrigger>
+                <TabsTrigger value="quiz" className="flex items-center gap-1 text-xs transition-all duration-300 hover:scale-105 data-[state=active]:bg-white/80">
+                  <TestTube className="h-3 w-3" />
+                  <span className="hidden sm:inline">Quiz</span>
+                </TabsTrigger>
+                <TabsTrigger value="personality" className="flex items-center gap-1 text-xs transition-all duration-300 hover:scale-105 data-[state=active]:bg-white/80">
+                  <User className="h-3 w-3" />
+                  <span className="hidden sm:inline">AI Doc</span>
+                </TabsTrigger>
+                <TabsTrigger value="binaural" className="flex items-center gap-1 text-xs transition-all duration-300 hover:scale-105 data-[state=active]:bg-white/80">
+                  <Music className="h-3 w-3" />
+                  <span className="hidden sm:inline">Audio</span>
+                </TabsTrigger>
+                <TabsTrigger value="relaxation" className="flex items-center gap-1 text-xs transition-all duration-300 hover:scale-105 data-[state=active]:bg-white/80">
+                  <GamepadIcon className="h-3 w-3" />
+                  <span className="hidden sm:inline">Games</span>
+                </TabsTrigger>
+                <TabsTrigger value="exercise" className="flex items-center gap-1 text-xs transition-all duration-300 hover:scale-105 data-[state=active]:bg-white/80">
+                  <Dumbbell className="h-3 w-3" />
+                  <span className="hidden sm:inline">Exercise</span>
+                </TabsTrigger>
+                <TabsTrigger value="nutrition" className="flex items-center gap-1 text-xs transition-all duration-300 hover:scale-105 data-[state=active]:bg-white/80">
+                  <Apple className="h-3 w-3" />
+                  <span className="hidden sm:inline">Nutrition</span>
+                </TabsTrigger>
+                <TabsTrigger value="stories" className="flex items-center gap-1 text-xs transition-all duration-300 hover:scale-105 data-[state=active]:bg-white/80">
+                  <BookOpen className="h-3 w-3" />
+                  <span className="hidden sm:inline">Stories</span>
+                </TabsTrigger>
+                <TabsTrigger value="emergency" className="flex items-center gap-1 text-xs transition-all duration-300 hover:scale-105 data-[state=active]:bg-white/80">
+                  <AlertTriangle className="h-3 w-3 text-red-500" />
+                  <span className="hidden sm:inline">SOS</span>
+                </TabsTrigger>
+                <TabsTrigger value="checkin" className="flex items-center gap-1 text-xs transition-all duration-300 hover:scale-105 data-[state=active]:bg-white/80">
+                  <Brain className="h-3 w-3 animate-spin-slow" />
+                  <span className="hidden sm:inline">Check-in</span>
+                </TabsTrigger>
+                <TabsTrigger value="insights" className="flex items-center gap-1 text-xs transition-all duration-300 hover:scale-105 data-[state=active]:bg-white/80">
+                  <TrendingUp className="h-3 w-3 animate-bounce-x" />
+                  <span className="hidden sm:inline">Insights</span>
+                </TabsTrigger>
+                <TabsTrigger value="support" className="flex items-center gap-1 text-xs transition-all duration-300 hover:scale-105 data-[state=active]:bg-white/80">
+                  <MessageCircle className="h-3 w-3 animate-wiggle" />
+                  <span className="hidden sm:inline">Chat</span>
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="tracker" className="space-y-6 animate-fade-in-scale">
+                <MoodTracker onMoodChange={setUserMood} />
+              </TabsContent>
+
+              <TabsContent value="quiz" className="space-y-6 animate-fade-in-scale">
+                <MoodQuiz onMoodResult={setUserMood} />
+              </TabsContent>
+
+              <TabsContent value="personality" className="space-y-6 animate-fade-in-scale">
+                <PersonalityChat />
+              </TabsContent>
+
+              <TabsContent value="binaural" className="space-y-6 animate-fade-in-scale">
+                <BineuralBeats />
+              </TabsContent>
+
+              <TabsContent value="relaxation" className="space-y-6 animate-fade-in-scale">
+                <RelaxationHub />
+              </TabsContent>
+
+              <TabsContent value="exercise" className="space-y-6 animate-fade-in-scale">
+                <ExerciseRecommendations />
+              </TabsContent>
+
+              <TabsContent value="nutrition" className="space-y-6 animate-fade-in-scale">
+                <NutritionTracker />
+              </TabsContent>
+
+              <TabsContent value="stories" className="space-y-6 animate-fade-in-scale">
+                <MotivationalStories />
+              </TabsContent>
+
+              <TabsContent value="emergency" className="space-y-6 animate-fade-in-scale">
+                <EmergencySupport />
+              </TabsContent>
+
+              <TabsContent value="checkin" className="space-y-6 animate-fade-in-scale">
+                <DailyCheckIn />
+              </TabsContent>
+
+              <TabsContent value="insights" className="space-y-6 animate-fade-in-scale">
+                <MoodInsights />
+              </TabsContent>
+
+              <TabsContent value="support" className="space-y-6 animate-fade-in-scale">
+                <ChatSupport />
+              </TabsContent>
+            </Tabs>
+          </div>
+        </main>
       </div>
     </div>
   );
